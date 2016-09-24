@@ -303,7 +303,7 @@ function handleAnswerRequest(intent, session, callback) {
                 //CHANGE WRONG
                 speechOutputAnalysis = "wrong. "
             }
-            speechOutputAnalysis += "The correct proununciation is " + correctAnswerText + ". ";
+            speechOutputAnalysis += "The correct pronunciation is " + correctAnswerText + ". ";
         }
         // if currentQuestionIndex is 4, we've reached 5 questions (zero-indexed) and can exit the game session
         if (currentQuestionIndex == GAME_LENGTH - 1) {
