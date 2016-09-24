@@ -13,7 +13,7 @@
  * supports 1 player at a time, and does not support games across sessions.
  */
 
-'use strict';
+"use strict";
 
 /**
  * When editing your questions pay attention to your punctuation. Make sure you use question marks or periods.
@@ -27,13 +27,13 @@ var questions = [
     },
     {
         "Please say crisps": [
-            "Crisps"
+            "crisps"
             
         ]
     },
     {
         "Please say clothes.": [
-            "Clothes."
+            "clothes."
         ]
     },
     {
@@ -168,13 +168,11 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 var ANSWER_COUNT = 1;
 var GAME_LENGTH = 5;
-var CARD_TITLE = "Doctor ESL"; 
+var CARD_TITLE = "Doctor ESL"; ;
 
 function getWelcomeResponse(callback) {
-    // Be sure to change this for your skill.
     var sessionAttributes = {},
-        //CHANGE THIS TEXT
-        speechOutput = "Let's do a word challenge. I will give you words, please say them back to me. Let's begin. ",
+        speechOutput = "Let\'s do a word challenge. I will give you words, please say them back to me. Let\'s begin. ",
         shouldEndSession = false,
 
         gameQuestions = populateGameQuestions(),
@@ -185,11 +183,13 @@ function getWelcomeResponse(callback) {
         spokenQuestion = Object.keys(questions[gameQuestions[currentQuestionIndex]]),
         repromptText = spokenQuestion,
 
-        i, j;
+        i, 
+        j;
 
     for (i = 0; i < ANSWER_COUNT; i++) {
         repromptText += ""
     }
+
     speechOutput += repromptText;
     sessionAttributes = {
         "speechOutput": repromptText,
@@ -273,15 +273,11 @@ function handleAnswerRequest(intent, session, callback) {
     var userGaveUp = intent.name === "DontKnowIntent";
 
     if (!gameInProgress) {
-        // If the user responded with an answer but there is no game in progress, ask the user
-        // if they want to start a new game. Set a flag to track that we've prompted the user.
         sessionAttributes.userPromptedToContinue = true;
         speechOutput = "There is no word challenge in progress. Do you want to start a new word challenge? ";
         callback(sessionAttributes,
             buildSpeechletResponse(CARD_TITLE, speechOutput, speechOutput, false));
     } else if (!answerSlotValid && !userGaveUp) {
-        // If the user provided answer isn't a number > 0 and < ANSWER_COUNT,
-        // return an error message to the user. Remember to guide the user into providing correct values.
         var reprompt = session.attributes.speechOutput;
         var speechOutput = "Sorry, your answer is not is our list. " + reprompt;
         callback(session.attributes,
@@ -297,15 +293,13 @@ function handleAnswerRequest(intent, session, callback) {
 
         if (answerSlotValid && intent.slots.Answer.value.toUpperCase() == correctAnswerText.toUpperCase()) {
             currentScore++;
-            speechOutputAnalysis = "correct. ";
+            speechOutputAnalysis = "sounds good. ";
         } else {
             if (!userGaveUp) {
-                //CHANGE WRONG
-                speechOutputAnalysis = "wrong. "
+                speechOutputAnalysis = "let me say that one more time. "
             }
-            speechOutputAnalysis += "The correct pronunciation is " + correctAnswerText + ". ";
+            speechOutputAnalysis += "It is pronounced " + correctAnswerText + ". ";
         }
-        // if currentQuestionIndex is 4, we've reached 5 questions (zero-indexed) and can exit the game session
         if (currentQuestionIndex == GAME_LENGTH - 1) {
             speechOutput = userGaveUp ? "" : "That answer is ";
             speechOutput += speechOutputAnalysis + " Thank you for learning with Alexa!";
@@ -314,7 +308,6 @@ function handleAnswerRequest(intent, session, callback) {
         } else {
             currentQuestionIndex += 1;
             var spokenQuestion = Object.keys(questions[gameQuestions[currentQuestionIndex]]);
-            // Generate a random index for the correct answer, from 0 to 3
             correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
             var roundAnswers = populateRoundAnswers(gameQuestions, currentQuestionIndex, correctAnswerIndex),
 
@@ -323,7 +316,8 @@ function handleAnswerRequest(intent, session, callback) {
             for (var i = 0; i < ANSWER_COUNT; i++) {
                 repromptText +=  ""
             }
-            speechOutput += userGaveUp ? "" : "That proununciation is ";
+
+            speechOutput += userGaveUp ? "" : "That pronunciation is " + correctAnswerText;
 
             sessionAttributes = {
                 "speechOutput": repromptText,
