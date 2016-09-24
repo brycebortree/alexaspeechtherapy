@@ -317,7 +317,7 @@ function handleAnswerRequest(intent, session, callback) {
                 repromptText +=  ""
             }
 
-            speechOutput += userGaveUp ? "" : "That pronunciation is " + correctAnswerText;
+            speechOutput += userGaveUp ? "" : "Great. That pronunciation is " + correctAnswerText + "Would you like another random pronunciation? ";
 
             sessionAttributes = {
                 "speechOutput": repromptText,
